@@ -9,7 +9,7 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>codec-http2</artifactId>
+    <artifactId>serialize-protostuff</artifactId>
 
     <dependencies>
 
