@@ -2,6 +2,7 @@ package com.flashrpc.core;
 
 import com.flashrpc.core.util.ExecutorBuilder;
 
+import java.io.IOException;
 import java.util.concurrent.Executor;
 
 /**
@@ -16,6 +17,8 @@ public class Server {
 
     private Executor executor;
 
+
+
     Server(ServerChannel serverChannel, Serializer serializer, Protocol protocol, int port, Class serviceClass) {
         this.executor = ExecutorBuilder.executorBuild("flashrpc-business-executor-%d", true);
         this.serviceClass = serviceClass;
@@ -26,8 +29,14 @@ public class Server {
     }
 
     public void start() {
+        try {
+            serverChannel.start(port,executor);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void stop() {
+    public void shutdown() {
+        serverChannel.shutdown();
     }
 }

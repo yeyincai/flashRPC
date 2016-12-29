@@ -2,32 +2,25 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.yyc.flashRPC</groupId>
         <artifactId>flashRPC</artifactId>
+        <groupId>com.yyc.flashRPC</groupId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
+    <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>serialize-protostuff</artifactId>
+    <artifactId>test</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>com.yyc.flashRPC</groupId>
-            <artifactId>core</artifactId>
+            <artifactId>transport-netty</artifactId>
             <version>${project.version}</version>
         </dependency>
-
         <dependency>
-            <groupId>com.dyuproject.protostuff</groupId>
-            <artifactId>protostuff-core</artifactId>
-            <version>${protostuff.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.dyuproject.protostuff</groupId>
-            <artifactId>protostuff-runtime</artifactId>
-            <version>${protostuff.version}</version>
+            <groupId>com.yyc.flashRPC</groupId>
+            <artifactId>serialize-protostuff</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
-
 </project>

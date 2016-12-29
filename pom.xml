@@ -17,7 +17,7 @@
 		<mockito.version>1.10.19</mockito.version>
 		<powermock.version>1.6.5</powermock.version>
 		<assertj.version>3.5.2</assertj.version>
-
+		<protostuff.version>1.0.12</protostuff.version>
 	</properties>
 
 	<dependencyManagement>
@@ -69,9 +69,15 @@
 		<module>core</module>
 		<module>serialize-protostuff</module>
 		<module>transport-netty</module>
+		<module>test</module>
 	</modules>
 
 	<dependencies>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+		</dependency>
+
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>

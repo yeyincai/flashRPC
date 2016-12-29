@@ -1,5 +1,7 @@
-package com.flashrpc.core;
+package core;
 
+import com.flashrpc.core.Server;
+import com.flashrpc.core.ServerBuilder;
 import org.junit.Test;
 
 /**
@@ -11,5 +13,7 @@ public class ServerBuilderTest {
     public void test(){
         Server server = ServerBuilder.forPort(8888).addService(String.class).build();
         server.start();
+
+        server.shutdown();
     }
 }
