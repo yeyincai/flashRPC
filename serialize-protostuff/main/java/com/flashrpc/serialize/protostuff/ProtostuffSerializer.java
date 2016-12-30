@@ -9,7 +9,7 @@ import static com.dyuproject.protostuff.runtime.RuntimeSchema.getSchema;
 import static com.flashrpc.serialize.protostuff.SchemaCache.getInstance;
 
 
-public class ProtostuffCodec implements Serializer {
+public class ProtostuffSerializer implements Serializer {
 
     public  <T> byte[] serializer(T obj) {
         @SuppressWarnings("unchecked")

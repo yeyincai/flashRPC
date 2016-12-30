@@ -1,6 +1,9 @@
 package com.flashrpc.transport.netty;
 
+import com.flashrpc.core.MessageHandler;
+import com.flashrpc.core.Protocol;
 import com.flashrpc.core.ServerChannel;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -15,33 +18,38 @@ import java.util.concurrent.Executor;
  */
 public class NettyServerChannel implements ServerChannel {
     private static final Logger logger = LoggerFactory.getLogger(NettyServerChannel.class);
-    private Executor executor;
     private EventLoopGroup bossGroup;
     private EventLoopGroup workerGroup;
-    private ChannelFuture nettyServerChannelFuture;
+    private Channel channel;
 
     @Override
-    public void start(int port, Executor executor) throws IOException {
-        this.executor = executor;
+    public void start(int port, Executor executor, Protocol protocol, MessageHandler messageHandler) throws IOException {
         bossGroup = new NioEventLoopGroup();
         workerGroup = new NioEventLoopGroup();
-        nettyServerChannelFuture = ServerChannelBuilder.build(bossGroup, workerGroup, new ServerChannelInitializer(), port);
+        ChannelFuture nettyServerChannelFuture = ServerChannelBuilder.build(bossGroup, workerGroup, new ServerChannelInitializer(executor,messageHandler), port);
 
         try {
-            nettyServerChannelFuture.sync();
-        } catch (InterruptedException e) {
-            logger.error("中断异常", e);
+            nettyServerChannelFuture.await();
+        } catch (InterruptedException ex) {
             Thread.currentThread().interrupt();
-        } catch (Exception e) {
-            logger.error("启动失败...", e);
-            System.exit(-1);
+            logger.error("启动失败...", ex);
+            throw new RuntimeException("Interrupted waiting for bind");
         }
+        if (!nettyServerChannelFuture.isSuccess()) {
+            logger.error("启动失败...", nettyServerChannelFuture.cause());
+            throw new IOException("Failed to bind", nettyServerChannelFuture.cause());
+        }
+        channel = nettyServerChannelFuture.channel();
     }
 
     @Override
     public void shutdown() {
+        if(channel==null || !channel.isOpen()){
+            return;
+        }
+
         try {
-            nettyServerChannelFuture.channel().close();
+            channel.close();
         } catch (Exception e) {
             logger.error("close NettyServerChannel fail ",e);
         } finally {
@@ -49,5 +57,10 @@ public class NettyServerChannel implements ServerChannel {
             workerGroup.shutdownGracefully();
         }
 
+    }
+
+    @Override
+    public void sendMsg(byte[]  msg){
+        channel.write(msg);
     }
 }

@@ -13,7 +13,7 @@ public class ProtostuffCodecUtilTest {
     public void test(){
 
         Pojo pojo = new Pojo(18,"yyc");
-        ProtostuffCodec protostuffCodec = new ProtostuffCodec();
+        ProtostuffSerializer protostuffCodec = new ProtostuffSerializer();
         byte[] serializer = protostuffCodec.serializer(pojo);
         Pojo deserializer = protostuffCodec.deserializer(serializer, Pojo.class);
         assertThat(deserializer.getAge()).isEqualTo(pojo.getAge());

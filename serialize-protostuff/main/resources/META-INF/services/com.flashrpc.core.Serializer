@@ -1,1 +1,1 @@
-com.flashrpc.serialize.protostuff.ProtostuffCodec
+com.flashrpc.serialize.protostuff.ProtostuffSerializer

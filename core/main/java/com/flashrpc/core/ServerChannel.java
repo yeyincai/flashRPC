@@ -8,7 +8,9 @@ import java.util.concurrent.Executor;
  */
 public interface ServerChannel {
 
-    void start(int port,Executor executor) throws IOException;
+    void start(int port,Executor executor,Protocol protocol,MessageHandler messageHandler) throws IOException;
 
     void shutdown();
+
+    void sendMsg(byte[]  msg);
 }

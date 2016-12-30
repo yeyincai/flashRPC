@@ -30,7 +30,7 @@ public final class ServerBuilder {
     public Server build() {
         serverChannel = ServiceLoadUtil.getProvider(ServerChannel.class);
         serializer = ServiceLoadUtil.getProvider(Serializer.class);
-        //protocol = ServiceLoadUtil.getProvider(Protocol.class);
+        protocol = ServiceLoadUtil.getProvider(Protocol.class);
         return new Server(serverChannel, serializer, protocol, port, serviceClass);
     }
 }
