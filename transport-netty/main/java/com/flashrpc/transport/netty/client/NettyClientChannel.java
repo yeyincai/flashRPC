@@ -4,6 +4,8 @@ import com.flashrpc.core.Protocol;
 import com.flashrpc.core.client.ClientChannel;
 import com.flashrpc.core.client.ClientMessageHandler;
 import com.flashrpc.transport.netty.server.NettyServerChannel;
+import com.flashrpc.transport.netty.util.ChannelWriteMessageUtil;
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -46,7 +48,9 @@ public class NettyClientChannel implements ClientChannel {
 
     @Override
     public void sendMsg(byte[] msg) {
-        channel.write(msg);
+        logger.info("service write msg={} ",msg);
+        ByteBuf byteBuf = channel.alloc().buffer().writeBytes( msg);
+        ChannelWriteMessageUtil.sendMsg(channel,byteBuf);
     }
 
 

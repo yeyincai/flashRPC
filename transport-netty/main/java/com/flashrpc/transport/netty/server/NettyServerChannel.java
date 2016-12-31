@@ -59,8 +59,4 @@ public class NettyServerChannel implements ServerChannel {
 
     }
 
-    @Override
-    public void sendMsg(byte[]  msg){
-        channel.write(msg);
-    }
 }

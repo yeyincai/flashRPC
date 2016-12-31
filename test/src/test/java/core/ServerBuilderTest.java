@@ -13,10 +13,10 @@ public class ServerBuilderTest {
 
     @Test
     public void test() throws InterruptedException {
-
-        Server server = ServerBuilder.forPort(8888).addService(HelloImpl.class).build();
+        Hello hello = new HelloImpl();
+        Server server = ServerBuilder.forPort(8888).addService(hello).build();
         server.start();
-        TimeUnit.SECONDS.sleep(100);
+        TimeUnit.SECONDS.sleep(1000);
         server.shutdown();
     }
 }

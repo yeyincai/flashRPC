@@ -33,6 +33,7 @@ class Client<Builder extends Client, T> {
         this.serializer = ServiceLoadUtil.getProvider(Serializer.class);
         this.clientChannel = ServiceLoadUtil.getProvider(ClientChannel.class);
         this.atomicLong = new AtomicLong(0);
+        this.messageHandler =  new ClientMessageHandlerImpl(serializer,clientChannel);
         //this.protocol = ServiceLoadUtil.getProvider(Protocol.class);
     }
 
@@ -51,8 +52,8 @@ class Client<Builder extends Client, T> {
 
     void start() {
         try {
+
             clientChannel.start(messageHandler, socketAddress, protocol);
-            messageHandler =  new ClientMessageHandlerImpl(serializer,clientChannel);
         } catch (IOException e) {
             throw new FlashRPCException("clientChannel init fail", e);
         }

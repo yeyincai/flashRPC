@@ -20,20 +20,20 @@ public class Server {
     private Serializer serializer;//序列化
     private Protocol protocol;//传输协议
     private int port;//服务的d端口
-    private Class serviceClass;//需要发布rpc的服务,一条channel可以发布服务，但是这里不采用这种方案，一条channel对应一个服务
+    private Object serviceBean;//需要发布rpc的服务,一条channel可以发布服务，但是这里不采用这种方案，一条channel对应一个服务
 
     private ServerMessageHandler messageHandler;
     private Executor executor;
 
-    Server(ServerChannel serverChannel, Serializer serializer, Protocol protocol, int port, Class serviceClass) {
+    Server(ServerChannel serverChannel, Serializer serializer, Protocol protocol, int port, Object serviceBean) {
         this.executor = ExecutorBuilder.executorBuild("flashrpc-business-executor-%d", true);
-        this.serviceClass = serviceClass;
+        this.serviceBean = serviceBean;
         this.serverChannel = serverChannel;
         this.serializer = serializer;
         this.port = port;
         this.protocol = protocol;
 
-        messageHandler = new ServerMessageHandlerImpl(serviceClass,serializer,serverChannel);
+        messageHandler = new ServerMessageHandlerImpl(serviceBean,serializer,serverChannel);
     }
 
     public void start() {

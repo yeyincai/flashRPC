@@ -5,6 +5,4 @@ package com.flashrpc.core;
  */
 public interface AbstractChannel {
     void shutdown();
-
-    void sendMsg(byte[]  msg);
 }

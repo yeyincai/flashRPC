@@ -13,4 +13,5 @@ public interface ClientChannel extends AbstractChannel {
 
     void start(ClientMessageHandler messageHandler, SocketAddress socketAddress, Protocol protocol ) throws IOException;
 
+    void sendMsg(byte[]  msg);
 }

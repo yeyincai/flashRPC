@@ -29,7 +29,11 @@ public class MessageCallBack {
             lock.lock();
             finish.await(10*1000, TimeUnit.MILLISECONDS);
             if (this.response != null) {
-                return this.response.getResult();
+                if(this.response.getError()!=null){
+                    throw new RuntimeException(response.getError());
+                }else {
+                    return this.response.getResult();
+                }
             } else {
                 return null;
             }

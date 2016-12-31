@@ -1,6 +1,5 @@
 package com.flashrpc.core.client;
 
-import com.flashrpc.core.AbstractChannel;
 import com.flashrpc.core.Serializer;
 import com.flashrpc.core.metadata.RpcRequest;
 import com.flashrpc.core.metadata.RpcResponse;
@@ -17,13 +16,14 @@ import java.util.Map;
 public class ClientMessageHandlerImpl implements ClientMessageHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(ServerMessageHandlerImpl.class);
+
     private Serializer serializer;
-    private AbstractChannel channel;
+    private ClientChannel channel;
 
     private Map<Long, MessageCallBack> mapCallBack;
 
 
-    protected ClientMessageHandlerImpl(Serializer serializer, AbstractChannel channel) {
+    protected ClientMessageHandlerImpl(Serializer serializer, ClientChannel channel) {
         this.serializer = serializer;
         this.channel = channel;
         mapCallBack = Maps.newConcurrentMap();

@@ -16,6 +16,17 @@ public class ClientBuilderTest {
     public void test() throws InterruptedException {
         InetSocketAddress serviceAddress = InetSocketAddress.createUnresolved("127.0.0.1", 8888);
         Hello hello = ClientBuilder.builderClass(Hello.class).forAddress(serviceAddress).build();
-        assertThat(hello.sayHello("yyc")).isEqualTo("yyc-hello");
+        for (int i = 0; i < 100000; i++) {
+            assertThat(hello.sayHello(i+"yyc")).isEqualTo(i+"yyc-hello!");
+            System.out.println(i);
+        }
+
+        /*AtomicInteger ao = new AtomicInteger(0);
+        SimpleExecutor sim = new SimpleExecutor(() -> {
+            int i = ao.incrementAndGet();
+            assertThat(hello.sayHello(i + "yyc")).isEqualTo(i + "yyc-hello!");
+        });
+
+        sim.execute(1, 30);*/
     }
 }
