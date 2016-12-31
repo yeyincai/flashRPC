@@ -1,5 +1,6 @@
 package com.flashrpc.core.server;
 
+import com.flashrpc.core.SendMessage;
 import com.flashrpc.core.Serializer;
 import com.flashrpc.core.metadata.RpcRequest;
 import com.flashrpc.core.metadata.RpcResponse;
@@ -24,7 +25,7 @@ public class ServerMessageHandlerImpl implements ServerMessageHandler {
     }
 
     @Override
-    public void receiveAndProcessor(byte[] request,ReceiveMessage receiveMessage) {
+    public void receiveAndProcessor(byte[] request,SendMessage receiveMessage) {
         RpcRequest rpcRequest = serializer.deserializer(request, RpcRequest.class);
 
         /*if (!serviceClass.getSimpleName().equals(rpcRequest.getClassName())) {

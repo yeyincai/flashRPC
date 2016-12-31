@@ -1,9 +1,9 @@
-package com.flashrpc.core.server;
+package com.flashrpc.core;
 
 /**
  * Created by yeyc on 2016/12/31.
  */
-public interface ReceiveMessage {
+public interface SendMessage {
 
     void sendMsg(byte[]  msg);
 }

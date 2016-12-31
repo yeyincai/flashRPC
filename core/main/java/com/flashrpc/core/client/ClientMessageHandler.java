@@ -9,5 +9,5 @@ public interface ClientMessageHandler {
 
     void receiveAndProcessor(byte[] request);
 
-    MessageCallBack sendAndProcessor(RpcRequest rpcRequest);
+    Object sendAndProcessor(RpcRequest rpcRequest) throws InterruptedException;
 }

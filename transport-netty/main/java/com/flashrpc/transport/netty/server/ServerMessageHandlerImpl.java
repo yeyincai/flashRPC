@@ -1,6 +1,6 @@
 package com.flashrpc.transport.netty.server;
 
-import com.flashrpc.core.server.ReceiveMessage;
+import com.flashrpc.core.SendMessage;
 import com.flashrpc.core.server.ServerMessageHandler;
 import com.flashrpc.transport.netty.util.ChannelWriteMessageUtil;
 import io.netty.buffer.ByteBuf;
@@ -18,7 +18,7 @@ import java.util.concurrent.Executor;
 /**
  * Created by yeyc on 2016/12/30.
  */
-public class ServerMessageHandlerImpl extends ChannelInboundHandlerAdapter implements ReceiveMessage {
+public class ServerMessageHandlerImpl extends ChannelInboundHandlerAdapter implements SendMessage {
 
     private static final Logger logger = LoggerFactory.getLogger(ServerMessageHandlerImpl.class);
 
@@ -41,17 +41,16 @@ public class ServerMessageHandlerImpl extends ChannelInboundHandlerAdapter imple
     @Override
     public void channelRead(final ChannelHandlerContext ctx, Object msg) {
         logger.info("service read msg={} ",msg);
-        if(!(msg instanceof ByteBuf)){
+
+        //接收客户端发送的数据
+        if(!(msg instanceof byte[])){
             ReferenceCountUtil.release(msg);
             return;
         }
-        //接收客户端发送的数据
-        final ByteBuf writeMsg = (ByteBuf) msg;
-        final byte[] request = new byte[writeMsg.readableBytes()];
-        writeMsg.readBytes(request);
-        ReferenceCountUtil.release(msg);
+        //接收服务端发送的数据
+        final byte[] writeMsg = (byte[]) msg;
         //任务异步化
-        executor.execute(() -> messageHandler.receiveAndProcessor(request,this));
+        executor.execute(() -> messageHandler.receiveAndProcessor(writeMsg,this));
 
     }
 
@@ -66,7 +65,11 @@ public class ServerMessageHandlerImpl extends ChannelInboundHandlerAdapter imple
     @Override
     public void sendMsg(byte[]  msg){
         logger.info("service write msg={} ",msg);
-        ByteBuf byteBuf = outboundChannel.alloc().buffer().writeBytes( msg);
+
+        ByteBuf byteBuf = outboundChannel.alloc().buffer();
+        int dataLength = msg.length;
+        byteBuf.writeInt( dataLength);
+        byteBuf.writeBytes( msg);
         ChannelWriteMessageUtil.sendMsg(outboundChannel,byteBuf);
     }
 

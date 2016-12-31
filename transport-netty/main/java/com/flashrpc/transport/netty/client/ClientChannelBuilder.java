@@ -30,7 +30,6 @@ public class ClientChannelBuilder {
         }
 
         return channelFuture.channel();
-
     }
 
 }

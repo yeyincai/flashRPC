@@ -1,9 +1,14 @@
 package com.flashrpc.transport.netty.client;
 
 import com.flashrpc.core.client.ClientMessageHandler;
+import com.flashrpc.core.SendMessage;
+import com.flashrpc.transport.netty.util.ChannelWriteMessageUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import io.netty.channel.*;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelFutureListener;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.util.ReferenceCountUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +16,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Created by yeyc on 2016/12/31.
  */
-public class ClientMessageHandlerImpl extends ChannelInboundHandlerAdapter {
+public class ClientMessageHandlerImpl extends ChannelInboundHandlerAdapter implements SendMessage {
 
     private static final Logger logger = LoggerFactory.getLogger(ClientMessageHandlerImpl.class);
 
@@ -33,16 +38,14 @@ public class ClientMessageHandlerImpl extends ChannelInboundHandlerAdapter {
     public void channelRead(final ChannelHandlerContext ctx, Object msg) {
         logger.info("client read  msg={}",msg);
 
-        if(!(msg instanceof ByteBuf)){
+        if(!(msg instanceof byte[])){
             ReferenceCountUtil.release(msg);
             return;
         }
         //接收服务端发送的数据
-        final ByteBuf writeMsg = (ByteBuf) msg;
-        final byte[] request = new byte[writeMsg.readableBytes()];
-        writeMsg.readBytes(request);
+        final byte[] writeMsg = (byte[]) msg;
 
-        messageHandler.receiveAndProcessor(request);
+        messageHandler.receiveAndProcessor(writeMsg);
         ReferenceCountUtil.release(msg);
     }
 
@@ -52,6 +55,17 @@ public class ClientMessageHandlerImpl extends ChannelInboundHandlerAdapter {
         if (outboundChannel.isActive()) {
             outboundChannel.writeAndFlush(Unpooled.EMPTY_BUFFER).addListener(ChannelFutureListener.CLOSE);
         }
+    }
+
+    @Override
+    public void sendMsg(byte[] msg) {
+        logger.info("client request msg={} ",msg);
+
+        ByteBuf byteBuf = outboundChannel.alloc().buffer();
+        int dataLength = msg.length;
+        byteBuf.writeInt( dataLength);
+        byteBuf.writeBytes( msg);
+        ChannelWriteMessageUtil.sendMsg(outboundChannel,byteBuf);
     }
 
 }

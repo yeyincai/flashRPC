@@ -38,17 +38,22 @@ public class ClientMessageHandlerImpl implements ClientMessageHandler {
             if (messageCallBack != null) {
                 messageCallBack.over(rpcResponse);
                 mapCallBack.remove(rpcResponse.getRequestId());
+            } else {
+                logger.error("mapCallBack   not found data   getRequestId={}",rpcResponse.getRequestId());
             }
+        }
+        else {
+            logger.error("receive server data fail data={}",rpcResponse);
         }
     }
 
     @Override
-    public MessageCallBack sendAndProcessor(RpcRequest rpcRequest) {
+    public Object sendAndProcessor(RpcRequest rpcRequest) throws InterruptedException {
         final byte[] requestMsg = this.serializer.serializer(rpcRequest);
-        channel.sendMsg(requestMsg);
         final MessageCallBack messageCallBack = new MessageCallBack();
         mapCallBack.put(rpcRequest.getRequestId(), messageCallBack);
-        return messageCallBack;
+        channel.sendMsg(requestMsg);
+        return messageCallBack.start();
     }
 
 

@@ -27,7 +27,7 @@ public class MessageCallBack {
     public Object start() throws InterruptedException {
         try {
             lock.lock();
-            finish.await(10*1000, TimeUnit.MILLISECONDS);
+            finish.await(30*1000, TimeUnit.MILLISECONDS);
             if (this.response != null) {
                 if(this.response.getError()!=null){
                     throw new RuntimeException(response.getError());
@@ -35,7 +35,7 @@ public class MessageCallBack {
                     return this.response.getResult();
                 }
             } else {
-                return null;
+                throw new RuntimeException("request wait response time await!");
             }
         } finally {
             lock.unlock();

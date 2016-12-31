@@ -68,8 +68,8 @@ class Client<Builder extends Client, T> {
             request.setParameterTypes(method.getParameterTypes());
             request.setParameters(args);
 
-            MessageCallBack callBack = messageHandler.sendAndProcessor(request);
-            return callBack.start();
+            Object result = messageHandler.sendAndProcessor(request);
+            return result;
         };
 
         return (T) newProxyInstance(Client.class.getClassLoader(), new Class[]{clientClass}, clientInvocationHandler);
