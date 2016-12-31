@@ -1,4 +1,4 @@
-package com.flashrpc.transport.netty;
+package com.flashrpc.transport.netty.util;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -13,7 +13,7 @@ public class ChannelWriteMessageUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(ChannelWriteMessageUtil.class);
 
-    static  void  sendMsg(Channel outboundChannel, Object obj) {
+    public static  void  sendMsg(Channel outboundChannel, Object obj) {
         outboundChannel.writeAndFlush(obj).addListener(new ChannelFutureListener() {
             public void operationComplete(ChannelFuture future) {
                 if (future.isSuccess()) {

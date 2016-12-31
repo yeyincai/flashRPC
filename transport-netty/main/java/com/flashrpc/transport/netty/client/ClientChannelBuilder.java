@@ -1,4 +1,4 @@
-package com.flashrpc.transport.netty;
+package com.flashrpc.transport.netty.client;
 
 
 import com.flashrpc.core.exceptions.FlashRPCException;

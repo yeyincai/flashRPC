@@ -1,5 +1,7 @@
-package com.flashrpc.core;
+package com.flashrpc.core.server;
 
+import com.flashrpc.core.Protocol;
+import com.flashrpc.core.Serializer;
 import com.flashrpc.core.util.ServiceLoadUtil;
 
 /**
@@ -30,7 +32,7 @@ public final class ServerBuilder {
     public Server build() {
         serverChannel = ServiceLoadUtil.getProvider(ServerChannel.class);
         serializer = ServiceLoadUtil.getProvider(Serializer.class);
-        protocol = ServiceLoadUtil.getProvider(Protocol.class);
+        //protocol = ServiceLoadUtil.getProvider(Protocol.class);
         return new Server(serverChannel, serializer, protocol, port, serviceClass);
     }
 }

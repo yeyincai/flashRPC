@@ -1,8 +1,8 @@
-package com.flashrpc.transport.netty;
+package com.flashrpc.transport.netty.server;
 
-import com.flashrpc.core.MessageHandler;
 import com.flashrpc.core.Protocol;
-import com.flashrpc.core.ServerChannel;
+import com.flashrpc.core.server.ServerChannel;
+import com.flashrpc.core.server.ServerMessageHandler;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.EventLoopGroup;
@@ -23,7 +23,7 @@ public class NettyServerChannel implements ServerChannel {
     private Channel channel;
 
     @Override
-    public void start(int port, Executor executor, Protocol protocol, MessageHandler messageHandler) throws IOException {
+    public void start(int port, Executor executor, Protocol protocol, ServerMessageHandler messageHandler) throws IOException {
         bossGroup = new NioEventLoopGroup();
         workerGroup = new NioEventLoopGroup();
         ChannelFuture nettyServerChannelFuture = ServerChannelBuilder.build(bossGroup, workerGroup, new ServerChannelInitializer(executor,messageHandler), port);

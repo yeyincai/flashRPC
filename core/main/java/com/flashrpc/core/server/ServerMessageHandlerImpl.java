@@ -1,8 +1,7 @@
-package com.flashrpc.core.impl;
+package com.flashrpc.core.server;
 
-import com.flashrpc.core.MessageHandler;
+import com.flashrpc.core.AbstractChannel;
 import com.flashrpc.core.Serializer;
-import com.flashrpc.core.ServerChannel;
 import com.flashrpc.core.exceptions.FlashRPCException;
 import com.flashrpc.core.metadata.RpcRequest;
 import com.flashrpc.core.metadata.RpcResponse;
@@ -14,20 +13,20 @@ import java.lang.reflect.Method;
 /**
  * Created by yeyc on 2016/12/30.
  */
-public class MessageHandlerImpl implements MessageHandler {
-    private static final Logger logger = LoggerFactory.getLogger(MessageHandlerImpl.class);
+public class ServerMessageHandlerImpl implements ServerMessageHandler {
+    private static final Logger logger = LoggerFactory.getLogger(ServerMessageHandlerImpl.class);
     private Serializer serializer;
     private Class serviceClass;
-    private ServerChannel serverChannel;
+    private AbstractChannel channel;
 
-    public MessageHandlerImpl(Class serviceClass, Serializer serializer,ServerChannel serverChannel) {
+    public ServerMessageHandlerImpl(Class serviceClass, Serializer serializer, AbstractChannel channel) {
         this.serviceClass = serviceClass;
         this.serializer = serializer;
-        this.serverChannel = serverChannel;
+        this.channel = channel;
     }
 
     @Override
-    public void readAndProcessor(byte[] request) {
+    public void receiveAndProcessor(byte[] request) {
         RpcRequest rpcRequest = serializer.deserializer(request, RpcRequest.class);
 
         if (!serviceClass.getSimpleName().equals(rpcRequest.getClassName())) {
@@ -56,6 +55,8 @@ public class MessageHandlerImpl implements MessageHandler {
         }
 
         //发送数据给客户端
-        serverChannel.sendMsg(serializer.serializer(rpcResponse));
+        channel.sendMsg(serializer.serializer(rpcResponse));
     }
+
+
 }

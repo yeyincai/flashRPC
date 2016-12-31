@@ -1,6 +1,7 @@
-package com.flashrpc.transport.netty;
+package com.flashrpc.transport.netty.server;
 
-import com.flashrpc.core.MessageHandler;
+import com.flashrpc.core.server.ServerMessageHandler;
+import com.flashrpc.transport.netty.util.ChannelWriteMessageUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
@@ -17,10 +18,10 @@ public class ServerMessageHandlerImpl extends ChannelDuplexHandler {
     private static final Logger logger = LoggerFactory.getLogger(ServerMessageHandlerImpl.class);
 
     private Channel outboundChannel;
-    private MessageHandler messageHandler;
+    private ServerMessageHandler messageHandler;
     private Executor executor;
 
-    public ServerMessageHandlerImpl(Executor executor, MessageHandler messageHandler) {
+    public ServerMessageHandlerImpl(Executor executor, ServerMessageHandler messageHandler) {
         this.executor = executor;
         this.messageHandler = messageHandler;
     }
@@ -28,12 +29,13 @@ public class ServerMessageHandlerImpl extends ChannelDuplexHandler {
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
         outboundChannel = ctx.channel();
-        logger.info("MessageHandler  init ");
+        logger.info("ServerMessageHandlerImpl  init ");
         ctx.read();
     }
 
     @Override
     public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
+        logger.info("service write msg={} ",msg);
         if(!(msg instanceof byte[])){
             return;
         }
@@ -43,6 +45,7 @@ public class ServerMessageHandlerImpl extends ChannelDuplexHandler {
 
     @Override
     public void channelRead(final ChannelHandlerContext ctx, Object msg) {
+        logger.info("service read msg={} ",msg);
         if(!(msg instanceof ByteBuf)){
             return;
         }
@@ -52,7 +55,7 @@ public class ServerMessageHandlerImpl extends ChannelDuplexHandler {
         writeMsg.readBytes(request);
 
         //任务异步化
-        executor.execute(() -> messageHandler.readAndProcessor(request));
+        executor.execute(() -> messageHandler.receiveAndProcessor(request));
 
     }
 

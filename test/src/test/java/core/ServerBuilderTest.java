@@ -1,7 +1,7 @@
 package core;
 
-import com.flashrpc.core.Server;
-import com.flashrpc.core.ServerBuilder;
+import com.flashrpc.core.server.Server;
+import com.flashrpc.core.server.ServerBuilder;
 import org.junit.Test;
 
 import java.util.concurrent.TimeUnit;
@@ -13,11 +13,10 @@ public class ServerBuilderTest {
 
     @Test
     public void test() throws InterruptedException {
-        Server server = ServerBuilder.forPort(8888).addService(String.class).build();
+
+        Server server = ServerBuilder.forPort(8888).addService(HelloImpl.class).build();
         server.start();
-
-        TimeUnit.SECONDS.sleep(10);
-
+        TimeUnit.SECONDS.sleep(100);
         server.shutdown();
     }
 }

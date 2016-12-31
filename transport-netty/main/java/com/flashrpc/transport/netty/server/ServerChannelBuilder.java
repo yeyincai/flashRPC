@@ -1,4 +1,4 @@
-package com.flashrpc.transport.netty;
+package com.flashrpc.transport.netty.server;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
