@@ -2,7 +2,6 @@ package core;
 
 import com.flashrpc.core.server.Server;
 import com.flashrpc.core.server.ServerBuilder;
-import org.junit.Test;
 
 import java.util.concurrent.TimeUnit;
 
@@ -11,8 +10,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class ServerBuilderTest {
 
-    @Test
-    public void test() throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException {
         Hello hello = new HelloImpl();
         Server server = ServerBuilder.forPort(8888).addService(hello).build();
         server.start();
