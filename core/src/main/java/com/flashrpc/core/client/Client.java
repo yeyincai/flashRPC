@@ -52,7 +52,6 @@ class Client<Builder extends Client, T> {
 
     void start() {
         try {
-
             clientChannel.start(messageHandler, socketAddress, protocol);
         } catch (IOException e) {
             throw new FlashRPCException("clientChannel init fail", e);

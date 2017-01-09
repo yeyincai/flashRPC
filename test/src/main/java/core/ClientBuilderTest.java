@@ -15,6 +15,7 @@ public class ClientBuilderTest {
 
         InetSocketAddress serviceAddress = InetSocketAddress.createUnresolved("127.0.0.1", 8888);
         Hello hello = ClientBuilder.builderClass(Hello.class).forAddress(serviceAddress).build();
+
       /*  for (int i = 0; i < 100000; i++) {
             assert (hello.sayHello(i+"yyc")).equals(i+"yyc-hello!");
         }*/
@@ -28,6 +29,6 @@ public class ClientBuilderTest {
             }
         });
 
-        sim.execute(20, 30);
+        sim.execute(50, 60);
     }
 }
