@@ -3,7 +3,6 @@ package com.flashrpc.transport.netty.server;
 import com.flashrpc.core.SendMessage;
 import com.flashrpc.core.server.ServerMessageHandler;
 import com.flashrpc.transport.netty.util.ChannelWriteMessageUtil;
-import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;
@@ -62,15 +61,9 @@ public class ServerMessageHandlerImpl extends ChannelInboundHandlerAdapter imple
         }
     }
 
+
     @Override
-    public void sendMsg(byte[]  msg){
-        logger.info("service write msg={} ",msg);
-
-        ByteBuf byteBuf = outboundChannel.alloc().buffer();
-        int dataLength = msg.length;
-        byteBuf.writeInt( dataLength);
-        byteBuf.writeBytes( msg);
-        ChannelWriteMessageUtil.sendMsg(outboundChannel,byteBuf);
+    public void sendMsg(byte[] msg) {
+        ChannelWriteMessageUtil.sendMsg(outboundChannel,msg);
     }
-
 }

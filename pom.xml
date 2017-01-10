@@ -19,6 +19,8 @@
 		<assertj.version>3.5.2</assertj.version>
 		<protostuff.version>1.0.12</protostuff.version>
 		<logback.version>1.1.7</logback.version>
+
+		<jmh.version>1.9.1</jmh.version>
 	</properties>
 
 	<dependencyManagement>

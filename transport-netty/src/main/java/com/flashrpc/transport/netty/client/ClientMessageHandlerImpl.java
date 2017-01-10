@@ -1,9 +1,6 @@
 package com.flashrpc.transport.netty.client;
 
 import com.flashrpc.core.client.ClientMessageHandler;
-import com.flashrpc.core.SendMessage;
-import com.flashrpc.transport.netty.util.ChannelWriteMessageUtil;
-import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;
@@ -16,7 +13,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Created by yeyc on 2016/12/31.
  */
-public class ClientMessageHandlerImpl extends ChannelInboundHandlerAdapter implements SendMessage {
+public class ClientMessageHandlerImpl extends ChannelInboundHandlerAdapter{
 
     private static final Logger logger = LoggerFactory.getLogger(ClientMessageHandlerImpl.class);
 
@@ -55,17 +52,6 @@ public class ClientMessageHandlerImpl extends ChannelInboundHandlerAdapter imple
         if (outboundChannel.isActive()) {
             outboundChannel.writeAndFlush(Unpooled.EMPTY_BUFFER).addListener(ChannelFutureListener.CLOSE);
         }
-    }
-
-    @Override
-    public void sendMsg(byte[] msg) {
-        logger.info("client request msg={} ",msg);
-
-        ByteBuf byteBuf = outboundChannel.alloc().buffer();
-        int dataLength = msg.length;
-        byteBuf.writeInt( dataLength);
-        byteBuf.writeBytes( msg);
-        ChannelWriteMessageUtil.sendMsg(outboundChannel,byteBuf);
     }
 
 }

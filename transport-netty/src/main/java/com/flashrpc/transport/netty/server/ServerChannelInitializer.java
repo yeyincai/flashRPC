@@ -2,7 +2,7 @@ package com.flashrpc.transport.netty.server;
 
 
 import com.flashrpc.core.server.ServerMessageHandler;
-import com.flashrpc.transport.netty.MessageDecoder;
+import com.flashrpc.transport.netty.MessageCodec;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
@@ -30,8 +30,9 @@ public class ServerChannelInitializer extends ChannelInitializer<SocketChannel> 
     protected void initChannel(SocketChannel socketChannel) throws Exception {
         ChannelPipeline pipeline = socketChannel.pipeline();
         pipeline.addLast("log",new LoggingHandler(LogLevel.DEBUG));
-        pipeline.addLast("messageDecoder",new MessageDecoder());
+        pipeline.addLast("messageCodec", new MessageCodec());
         pipeline.addLast("server-message-handler", new ServerMessageHandlerImpl(executor, messageHandler));
+
         logger.info("ServerChannelInitializer  initChannel.....");
     }
 }

@@ -29,6 +29,6 @@ public class ClientBuilderTest {
             }
         });
 
-        sim.execute(50, 60);
+        sim.execute(35, 60);
     }
 }
