@@ -18,7 +18,7 @@ public class ServerChannelBuilder {
         return b.group(bossGroup, workerGroup)
                 .channel(NioServerSocketChannel.class)
                 .childHandler(channelHandler)
-                .childOption(ChannelOption.AUTO_READ, false)
+                .option(ChannelOption.SO_KEEPALIVE, true)
                 .bind(port);
     }
 }
