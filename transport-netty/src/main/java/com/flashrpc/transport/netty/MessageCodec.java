@@ -20,8 +20,6 @@ public class MessageCodec extends ByteToMessageCodec<byte[]> {
 
     @Override
     protected void encode(ChannelHandlerContext channelHandlerContext, byte[] msg, ByteBuf byteBuf) throws Exception {
-        if (logger.isInfoEnabled())
-            logger.info("  msg={} ", msg);
         int dataLength = msg.length;
         byteBuf.writeInt(dataLength);
         byteBuf.writeBytes(msg);
@@ -29,9 +27,6 @@ public class MessageCodec extends ByteToMessageCodec<byte[]> {
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
-        if (logger.isInfoEnabled())
-            logger.info("decode  msg={} ", in);
-
         if (in.readableBytes() < MessageCodec.MESSAGE_LENGTH) {
             return;
         }
@@ -44,9 +39,7 @@ public class MessageCodec extends ByteToMessageCodec<byte[]> {
         }
 
         if (in.readableBytes() < messageLength) {
-
             in.resetReaderIndex();
-            return;
         } else {
             byte[] messageBody = new byte[messageLength];
             in.readBytes(messageBody);

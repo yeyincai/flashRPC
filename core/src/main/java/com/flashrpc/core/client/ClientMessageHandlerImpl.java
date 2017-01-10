@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Map;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
@@ -23,7 +24,7 @@ class ClientMessageHandlerImpl implements ClientMessageHandler {
     private ClientChannel channel;
     private static final int TIME_AWAIT = 30 * 1000;
 
-    private Map<Long, LinkedBlockingQueue<RpcResponse>> mapCallBack;
+    private Map<Long, BlockingQueue<RpcResponse>> mapCallBack;
 
     ClientMessageHandlerImpl(Serializer serializer, ClientChannel channel) {
         this.serializer = serializer;
@@ -35,7 +36,7 @@ class ClientMessageHandlerImpl implements ClientMessageHandler {
     public void receiveAndProcessor(byte[] request) {
         final RpcResponse rpcResponse = this.serializer.deserializer(request, RpcResponse.class);
         if (rpcResponse != null && rpcResponse.getRequestId() > 0) {
-            LinkedBlockingQueue<RpcResponse> queue = mapCallBack.get(rpcResponse.getRequestId());
+            BlockingQueue<RpcResponse> queue = mapCallBack.get(rpcResponse.getRequestId());
             queue.add(rpcResponse);
             mapCallBack.remove(rpcResponse.getRequestId());
         } else {
@@ -48,7 +49,7 @@ class ClientMessageHandlerImpl implements ClientMessageHandler {
     public Object sendAndProcessor(RpcRequest rpcRequest) throws InterruptedException {
         final byte[] requestMsg = this.serializer.serializer(rpcRequest);
 
-        LinkedBlockingQueue<RpcResponse> queue = new LinkedBlockingQueue<>();
+        final BlockingQueue<RpcResponse> queue = new LinkedBlockingQueue<>();
         mapCallBack.put(rpcRequest.getRequestId(), queue);
         channel.sendMsg(requestMsg);
 

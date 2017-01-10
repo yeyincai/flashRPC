@@ -14,9 +14,13 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 public class JmhClient {
     @Benchmark
     @Group("JmhClient")
-    @GroupThreads(50)
+    @GroupThreads(35)
     public void getKey(){
-        String s = ClientHello.hello.sayHello("yyc");
+        long t = System.currentTimeMillis();
+        String s = ClientHello.hello.sayHello(t+"yyc");
+        if (!s.equals(t + "yyc-hello!")){
+            new RuntimeException();
+        }
     }
 
     public static void main(String[] args) throws RunnerException {
