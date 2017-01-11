@@ -17,4 +17,9 @@
 - codec-http2协议http2
 - protocol-protostuff序列化采用的protostuff
 - test测试
+
 设计的意图提现模块解耦、高扩展性
+
+####性能测试
+使用jmh进行基准测试：
+tps: 105785
